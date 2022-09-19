@@ -1,0 +1,9 @@
+django
+pyTelegramBotAPI
+bs4
+lxml
+django-jet
+django-ckeditor
+psutil
+dotenv
+pytz
