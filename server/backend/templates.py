@@ -26,6 +26,14 @@ class Messages():
     REQUEST_CONFIRMATION = Template.messages.get(id=59).gettext()
     REQUEST_CONFIRMATION_ACCEPT = Template.messages.get(id=60).gettext()
     REQUEST_AFTER_VISITING = Template.messages.get(id=66).gettext()
+    REGION_INFO = Template.messages.get(id=68).gettext()
+    INPUT_WORKING_TIME = Template.messages.get(id=74).gettext()
+    INPUT_NUMBER = Template.messages.get(id=75).gettext()
+    SAVED = Template.messages.get(id=76).gettext()
+    INCORRECT_FORMAT = Template.messages.get(id=77).gettext()
+    MENU = Template.messages.get(id=78).gettext()
+    REFERAL_PROGRAM = Template.messages.get(id=80).gettext()
+    REGION_RESERVATION_INFO = Template.messages.get(id=81).gettext()
 
 
 class Keys():
@@ -51,9 +59,19 @@ class Keys():
     REQUEST_AFTER_VISITING_OK = Template.keys.get(id=63).gettext()
     REQUEST_AFTER_VISITING_RECEIVING = Template.keys.get(id=64).gettext()
     REQUEST_AFTER_VISITING_IN_QUEUE = Template.keys.get(id=65).gettext()
+    ADMIN = Template.keys.get(id=67).gettext()
+    REGION_EDIT_WORKING_TIME = Template.keys.get(id=69).gettext()
+    REGION_EDIT_DAY_LIMIT = Template.keys.get(id=70).gettext()
+    REGION_EDIT_PERIOD = Template.keys.get(id=71).gettext()
+    REGION_RESERVATIONS = Template.keys.get(id=72).gettext()
+    REFERAL_PROGRAM = Template.keys.get(id=79).gettext()
+    COME = Template.keys.get(id=82).gettext()
+    NOT_COME = Template.keys.get(id=83).gettext()
 
 
 class Smiles():
     SMILES = Template.smiles.get(id=3).gettext()
     NEXT_PAGE = Template.smiles.get(id=61).gettext()
     PREV_PAGE = Template.smiles.get(id=62).gettext()
+    YES = Template.smiles.get(id=84).gettext()
+    NO = Template.smiles.get(id=85).gettext()

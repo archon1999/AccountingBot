@@ -17,6 +17,12 @@ def update_info(user: BotUser, message):
 def start_command_handler(bot: TeleBot, message):
     chat_id = message.chat.id
     user, _ = BotUser.objects.get_or_create(chat_id=chat_id)
+    if len(message.text.split()) == 2:
+        from_chat_id = message.text.split()[-1]
+        if (from_user := BotUser.objects.filter(chat_id=from_chat_id).first()):
+            user.from_user = from_user
+            user.save()
+
     update_info(user, message)
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(Keys.MENU)
@@ -93,19 +99,37 @@ def region_callback_query_handler(bot: TeleBot, call):
         CallType=CallTypes.MyReservations,
         page=1,
     )
+    referal_program_button = utils.make_inline_button(
+        text=Keys.REFERAL_PROGRAM,
+        CallType=CallTypes.ReferalProgram,
+    )
     keyboard = types.InlineKeyboardMarkup()
     keyboard.add(reservation_button)
     keyboard.add(my_reservations_button)
     keyboard.add(select_region_button)
+    keyboard.add(referal_program_button)
+    if user.region.admins.filter(user=user):
+        admin_button = utils.make_inline_button(
+            text=Keys.ADMIN,
+            CallType=CallTypes.Admin,
+            region_id=user.region.id,
+        )
+        keyboard.add(admin_button)
+
+    region = user.region
+    text = Messages.MENU.format(
+        region_name=region.name,
+        region_address=utils.filter_html(region.address),
+    )
     if call.message.from_user.is_bot:
         bot.edit_message_text(
-            text=utils.text_to_fat(Keys.MENU),
+            text=text,
             chat_id=chat_id,
             message_id=call.message.id,
             reply_markup=keyboard,
         )
     else:
-        bot.send_message(chat_id, utils.text_to_fat(Keys.MENU),
+        bot.send_message(chat_id, text,
                          reply_markup=keyboard)
 
 

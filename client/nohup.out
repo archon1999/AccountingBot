@@ -1,0 +1,359 @@
+/usr/local/lib/python3.10/site-packages/django_q/conf.py:139: UserWarning: Retry and timeout are misconfigured. Set retry larger than timeout, 
+        failure to do so will cause the tasks to be retriggered before completion. 
+        See https://django-q.readthedocs.io/en/latest/configure.html#retry for details.
+  warn(
+2022-09-20 01:17:16,681 (__init__.py:615 MainThread) ERROR - TeleBot: "Infinity polling exception: HTTPSConnectionPool(host='api.telegram.org', port=443): Read timed out. (read timeout=25)"
+2022-09-20 01:17:16,681 (__init__.py:617 MainThread) ERROR - TeleBot: "Exception traceback:
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/usr/local/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/usr/local/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/usr/local/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/usr/local/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/usr/local/lib/python3.10/ssl.py", line 1273, in recv_into
+    return self.read(nbytes, buffer)
+  File "/usr/local/lib/python3.10/ssl.py", line 1129, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/requests/adapters.py", line 440, in send
+    resp = conn.urlopen(
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 785, in urlopen
+    retries = retries.increment(
+  File "/usr/local/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/usr/local/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='api.telegram.org', port=443): Read timed out. (read timeout=25)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 611, in infinity_polling
+    self.polling(none_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 658, in polling
+    self.__threaded_polling(non_stop, interval, timeout, long_polling_timeout, allowed_updates)
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 720, in __threaded_polling
+    raise e
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 679, in __threaded_polling
+    polling_thread.raise_exceptions()
+  File "/usr/local/lib/python3.10/site-packages/telebot/util.py", line 105, in raise_exceptions
+    raise self.exception_info
+  File "/usr/local/lib/python3.10/site-packages/telebot/util.py", line 87, in run
+    task(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 407, in __retrieve_updates
+    updates = self.get_updates(offset=(self.last_update_id + 1),
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 387, in get_updates
+    json_updates = apihelper.get_updates(self.token, offset, limit, timeout, allowed_updates, long_polling_timeout)
+  File "/usr/local/lib/python3.10/site-packages/telebot/apihelper.py", line 328, in get_updates
+    return _make_request(token, method_url, params=payload)
+  File "/usr/local/lib/python3.10/site-packages/telebot/apihelper.py", line 152, in _make_request
+    result = _get_req_session().request(
+  File "/usr/local/lib/python3.10/site-packages/requests/sessions.py", line 529, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/local/lib/python3.10/site-packages/requests/sessions.py", line 645, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPSConnectionPool(host='api.telegram.org', port=443): Read timed out. (read timeout=25)
+"
+2022-09-20 01:17:29,699 (__init__.py:615 MainThread) ERROR - TeleBot: "Infinity polling exception: 'utf-8' codec can't decode byte 0xb2 in position 0: invalid start byte"
+2022-09-20 01:17:29,699 (__init__.py:617 MainThread) ERROR - TeleBot: "Exception traceback:
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 611, in infinity_polling
+    self.polling(none_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 658, in polling
+    self.__threaded_polling(non_stop, interval, timeout, long_polling_timeout, allowed_updates)
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 720, in __threaded_polling
+    raise e
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 679, in __threaded_polling
+    polling_thread.raise_exceptions()
+  File "/usr/local/lib/python3.10/site-packages/telebot/util.py", line 105, in raise_exceptions
+    raise self.exception_info
+  File "/usr/local/lib/python3.10/site-packages/telebot/util.py", line 87, in run
+    task(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 407, in __retrieve_updates
+    updates = self.get_updates(offset=(self.last_update_id + 1),
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 387, in get_updates
+    json_updates = apihelper.get_updates(self.token, offset, limit, timeout, allowed_updates, long_polling_timeout)
+  File "/usr/local/lib/python3.10/site-packages/telebot/apihelper.py", line 328, in get_updates
+    return _make_request(token, method_url, params=payload)
+  File "/usr/local/lib/python3.10/site-packages/telebot/apihelper.py", line 152, in _make_request
+    result = _get_req_session().request(
+  File "/usr/local/lib/python3.10/site-packages/requests/sessions.py", line 529, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/local/lib/python3.10/site-packages/requests/sessions.py", line 645, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/requests/adapters.py", line 440, in send
+    resp = conn.urlopen(
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 386, in _make_request
+    self._validate_conn(conn)
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1040, in _validate_conn
+    conn.connect()
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connection.py", line 358, in connect
+    conn = self._new_conn()
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+  File "/usr/local/lib/python3.10/site-packages/urllib3/util/connection.py", line 72, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+  File "/usr/local/lib/python3.10/socket.py", line 955, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb2 in position 0: invalid start byte
+"
+2022-09-20 01:17:42,713 (__init__.py:615 MainThread) ERROR - TeleBot: "Infinity polling exception: 'utf-8' codec can't decode byte 0xb2 in position 0: invalid start byte"
+2022-09-20 01:17:42,714 (__init__.py:617 MainThread) ERROR - TeleBot: "Exception traceback:
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 611, in infinity_polling
+    self.polling(none_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 658, in polling
+    self.__threaded_polling(non_stop, interval, timeout, long_polling_timeout, allowed_updates)
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 720, in __threaded_polling
+    raise e
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 679, in __threaded_polling
+    polling_thread.raise_exceptions()
+  File "/usr/local/lib/python3.10/site-packages/telebot/util.py", line 105, in raise_exceptions
+    raise self.exception_info
+  File "/usr/local/lib/python3.10/site-packages/telebot/util.py", line 87, in run
+    task(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 407, in __retrieve_updates
+    updates = self.get_updates(offset=(self.last_update_id + 1),
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 387, in get_updates
+    json_updates = apihelper.get_updates(self.token, offset, limit, timeout, allowed_updates, long_polling_timeout)
+  File "/usr/local/lib/python3.10/site-packages/telebot/apihelper.py", line 328, in get_updates
+    return _make_request(token, method_url, params=payload)
+  File "/usr/local/lib/python3.10/site-packages/telebot/apihelper.py", line 152, in _make_request
+    result = _get_req_session().request(
+  File "/usr/local/lib/python3.10/site-packages/requests/sessions.py", line 529, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/local/lib/python3.10/site-packages/requests/sessions.py", line 645, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/requests/adapters.py", line 440, in send
+    resp = conn.urlopen(
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 386, in _make_request
+    self._validate_conn(conn)
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1040, in _validate_conn
+    conn.connect()
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connection.py", line 358, in connect
+    conn = self._new_conn()
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+  File "/usr/local/lib/python3.10/site-packages/urllib3/util/connection.py", line 72, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+  File "/usr/local/lib/python3.10/socket.py", line 955, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb2 in position 0: invalid start byte
+"
+2022-09-20 01:57:57,414 (__init__.py:615 MainThread) ERROR - TeleBot: "Infinity polling exception: HTTPSConnectionPool(host='api.telegram.org', port=443): Read timed out. (read timeout=25)"
+2022-09-20 01:57:57,414 (__init__.py:617 MainThread) ERROR - TeleBot: "Exception traceback:
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/usr/local/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/usr/local/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/usr/local/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/usr/local/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/usr/local/lib/python3.10/ssl.py", line 1273, in recv_into
+    return self.read(nbytes, buffer)
+  File "/usr/local/lib/python3.10/ssl.py", line 1129, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/requests/adapters.py", line 440, in send
+    resp = conn.urlopen(
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 785, in urlopen
+    retries = retries.increment(
+  File "/usr/local/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/usr/local/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='api.telegram.org', port=443): Read timed out. (read timeout=25)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 611, in infinity_polling
+    self.polling(none_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 658, in polling
+    self.__threaded_polling(non_stop, interval, timeout, long_polling_timeout, allowed_updates)
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 720, in __threaded_polling
+    raise e
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 679, in __threaded_polling
+    polling_thread.raise_exceptions()
+  File "/usr/local/lib/python3.10/site-packages/telebot/util.py", line 105, in raise_exceptions
+    raise self.exception_info
+  File "/usr/local/lib/python3.10/site-packages/telebot/util.py", line 87, in run
+    task(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 407, in __retrieve_updates
+    updates = self.get_updates(offset=(self.last_update_id + 1),
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 387, in get_updates
+    json_updates = apihelper.get_updates(self.token, offset, limit, timeout, allowed_updates, long_polling_timeout)
+  File "/usr/local/lib/python3.10/site-packages/telebot/apihelper.py", line 328, in get_updates
+    return _make_request(token, method_url, params=payload)
+  File "/usr/local/lib/python3.10/site-packages/telebot/apihelper.py", line 152, in _make_request
+    result = _get_req_session().request(
+  File "/usr/local/lib/python3.10/site-packages/requests/sessions.py", line 529, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/local/lib/python3.10/site-packages/requests/sessions.py", line 645, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPSConnectionPool(host='api.telegram.org', port=443): Read timed out. (read timeout=25)
+"
+2022-09-20 02:00:25,900 (__init__.py:615 MainThread) ERROR - TeleBot: "Infinity polling exception: HTTPSConnectionPool(host='api.telegram.org', port=443): Read timed out. (read timeout=25)"
+2022-09-20 02:00:25,900 (__init__.py:617 MainThread) ERROR - TeleBot: "Exception traceback:
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/usr/local/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/usr/local/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/usr/local/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/usr/local/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/usr/local/lib/python3.10/ssl.py", line 1273, in recv_into
+    return self.read(nbytes, buffer)
+  File "/usr/local/lib/python3.10/ssl.py", line 1129, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/requests/adapters.py", line 440, in send
+    resp = conn.urlopen(
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 785, in urlopen
+    retries = retries.increment(
+  File "/usr/local/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/usr/local/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='api.telegram.org', port=443): Read timed out. (read timeout=25)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 611, in infinity_polling
+    self.polling(none_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 658, in polling
+    self.__threaded_polling(non_stop, interval, timeout, long_polling_timeout, allowed_updates)
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 720, in __threaded_polling
+    raise e
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 679, in __threaded_polling
+    polling_thread.raise_exceptions()
+  File "/usr/local/lib/python3.10/site-packages/telebot/util.py", line 105, in raise_exceptions
+    raise self.exception_info
+  File "/usr/local/lib/python3.10/site-packages/telebot/util.py", line 87, in run
+    task(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 407, in __retrieve_updates
+    updates = self.get_updates(offset=(self.last_update_id + 1),
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 387, in get_updates
+    json_updates = apihelper.get_updates(self.token, offset, limit, timeout, allowed_updates, long_polling_timeout)
+  File "/usr/local/lib/python3.10/site-packages/telebot/apihelper.py", line 328, in get_updates
+    return _make_request(token, method_url, params=payload)
+  File "/usr/local/lib/python3.10/site-packages/telebot/apihelper.py", line 152, in _make_request
+    result = _get_req_session().request(
+  File "/usr/local/lib/python3.10/site-packages/requests/sessions.py", line 529, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/local/lib/python3.10/site-packages/requests/sessions.py", line 645, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPSConnectionPool(host='api.telegram.org', port=443): Read timed out. (read timeout=25)
+"
+2022-09-20 02:00:38,917 (__init__.py:615 MainThread) ERROR - TeleBot: "Infinity polling exception: 'utf-8' codec can't decode byte 0xb2 in position 0: invalid start byte"
+2022-09-20 02:00:38,917 (__init__.py:617 MainThread) ERROR - TeleBot: "Exception traceback:
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 611, in infinity_polling
+    self.polling(none_stop=True, timeout=timeout, long_polling_timeout=long_polling_timeout,
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 658, in polling
+    self.__threaded_polling(non_stop, interval, timeout, long_polling_timeout, allowed_updates)
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 720, in __threaded_polling
+    raise e
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 679, in __threaded_polling
+    polling_thread.raise_exceptions()
+  File "/usr/local/lib/python3.10/site-packages/telebot/util.py", line 105, in raise_exceptions
+    raise self.exception_info
+  File "/usr/local/lib/python3.10/site-packages/telebot/util.py", line 87, in run
+    task(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 407, in __retrieve_updates
+    updates = self.get_updates(offset=(self.last_update_id + 1),
+  File "/usr/local/lib/python3.10/site-packages/telebot/__init__.py", line 387, in get_updates
+    json_updates = apihelper.get_updates(self.token, offset, limit, timeout, allowed_updates, long_polling_timeout)
+  File "/usr/local/lib/python3.10/site-packages/telebot/apihelper.py", line 328, in get_updates
+    return _make_request(token, method_url, params=payload)
+  File "/usr/local/lib/python3.10/site-packages/telebot/apihelper.py", line 152, in _make_request
+    result = _get_req_session().request(
+  File "/usr/local/lib/python3.10/site-packages/requests/sessions.py", line 529, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/local/lib/python3.10/site-packages/requests/sessions.py", line 645, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/requests/adapters.py", line 440, in send
+    resp = conn.urlopen(
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 386, in _make_request
+    self._validate_conn(conn)
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1040, in _validate_conn
+    conn.connect()
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connection.py", line 358, in connect
+    conn = self._new_conn()
+  File "/usr/local/lib/python3.10/site-packages/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+  File "/usr/local/lib/python3.10/site-packages/urllib3/util/connection.py", line 72, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+  File "/usr/local/lib/python3.10/socket.py", line 955, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb2 in position 0: invalid start byte
+"
+/usr/local/lib/python3.10/site-packages/django_q/conf.py:139: UserWarning: Retry and timeout are misconfigured. Set retry larger than timeout, 
+        failure to do so will cause the tasks to be retriggered before completion. 
+        See https://django-q.readthedocs.io/en/latest/configure.html#retry for details.
+  warn(

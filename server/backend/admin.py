@@ -22,7 +22,7 @@ class RegionAdmin_(admin.ModelAdmin):
 
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
-    list_display = ['id', 'region', 'user', 'status', 'datetime']
+    list_display = ['id', 'region', 'user', 'status', 'get_datetime']
     list_filter = ['region', 'status']
 
 

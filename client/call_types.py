@@ -46,6 +46,20 @@ class CallTypes():
     RequestAfterVisiting = CallTypeMeta('RequestAfterVisiting',
                                         'status__int',
                                         'reservation_id__int')
+    Admin = CallTypeMeta('Admin', 'region_id__int')
+    RegionEditWorkingTime = CallTypeMeta('RegionEditWorkingTime',
+                                         'region_id__int')
+    RegionEditDayLimit = CallTypeMeta('RegionEditDayLimit',
+                                      'region_id__int')
+    RegionEditPeriod = CallTypeMeta('RegionEditPeriod',
+                                    'region_id__int')
+    RegionReservations = CallTypeMeta('RegionReservations',
+                                      'region_id__int',
+                                      'page__int')
+    ReservationStatusChange = CallTypeMeta('ReservationStatusChange',
+                                           'reservation_id__int',
+                                           'status__int')
+    ReferalProgram = CallTypeMeta('ReferalProgram')
     Referals = CallTypeMeta('Referals')
     Contacts = CallTypeMeta('Contacts')
 

@@ -141,7 +141,7 @@ def make_page_keyboard(page: Page, CallType, **kwargs):
         buttons.append(prev_page_button)
 
     page_number_button = make_inline_button(
-        text=str(page.number),
+        text=str(page.number) + ' из ' + str(page.paginator.num_pages),
         CallType=CallTypes.Nothing,
     )
     buttons.append(page_number_button)
@@ -226,5 +226,5 @@ def check_user_reservation_limit(user):
     limit = int(os.getenv('RESERVATION_LIMIT_COUNT'))
     dt = timezone.now() - timezone.timedelta(days=reservation_limit_period)
     return user.reservations(manager='actual').filter(
-        datetime__gt=dt
-    ).count() <= limit
+        created__gt=dt
+    ).count() < limit

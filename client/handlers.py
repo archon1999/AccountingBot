@@ -12,8 +12,8 @@ import commands
 import utils
 from call_types import CallTypes
 
-from backend.models import BotUser, Reservation
-from backend.templates import Messages, Keys
+from backend.models import BotUser, Reservation, Region
+from backend.templates import Messages, Keys, Smiles
 
 
 def get_reservation_info(reservation):
@@ -323,8 +323,10 @@ def request_after_visting_callback_query_handler(bot: TeleBot, call):
     reservation_id = call_type.reservation_id
     reservation = Reservation.reservations.get(id=reservation_id)
     status = call_type.status
-    reservation.status = status
-    reservation.save()
+    if reservation.status != Reservation.Status.CONFIRMED:
+        reservation.status = status
+        reservation.save()
+
     if status != Reservation.Status.OK:
         request_after_visiting_time = os.getenv('REQUEST_AFTER_VISITING_TIME')
         dt = timezone.now() + timezone.timedelta(
@@ -339,3 +341,277 @@ def request_after_visting_callback_query_handler(bot: TeleBot, call):
 
     bot.send_message(chat_id, Messages.REQUEST_CONFIRMATION_ACCEPT)
     bot.delete_message(chat_id, call.message.id)
+
+
+def admin_callback_query_handler(bot: TeleBot, call):
+    call_type = CallTypes.parse_data(call.data)
+    region_id = call_type.region_id
+    region = Region.regions.get(id=region_id)
+    chat_id = call.message.chat.id
+
+    region_reservations_button = utils.make_inline_button(
+        text=Keys.REGION_RESERVATIONS,
+        CallType=CallTypes.RegionReservations,
+        region_id=region.id,
+        page=1,
+    )
+    region_edit_working_time_button = utils.make_inline_button(
+        text=Keys.REGION_EDIT_WORKING_TIME,
+        CallType=CallTypes.RegionEditWorkingTime,
+        region_id=region.id,
+    )
+    region_edit_day_limit_button = utils.make_inline_button(
+        text=Keys.REGION_EDIT_DAY_LIMIT,
+        CallType=CallTypes.RegionEditDayLimit,
+        region_id=region.id,
+    )
+    region_edit_period_button = utils.make_inline_button(
+        text=Keys.REGION_EDIT_PERIOD,
+        CallType=CallTypes.RegionEditPeriod,
+        region_id=region.id,
+    )
+    back_button = utils.make_inline_button(
+        text=Keys.BACK,
+        CallType=CallTypes.Menu,
+    )
+    keyboard = types.InlineKeyboardMarkup()
+    keyboard.add(region_reservations_button)
+    keyboard.add(region_edit_working_time_button)
+    keyboard.add(region_edit_day_limit_button)
+    keyboard.add(region_edit_period_button)
+    keyboard.add(back_button)
+    text = Messages.REGION_INFO.format(
+        name=region.name,
+        working_time_from=region.working_time_from.strftime('%H:%M'),
+        working_time_to=region.working_time_to.strftime('%H:%M'),
+        period=region.period,
+        day_limit=region.day_limit,
+    )
+    bot.edit_message_text(
+        text=text,
+        chat_id=chat_id,
+        reply_markup=keyboard,
+        message_id=call.message.id,
+    )
+
+
+def region_edit_working_time_callback_query_handler(bot: TeleBot, call):
+    chat_id = call.message.chat.id
+    user = BotUser.objects.get(chat_id=chat_id)
+    call_type = CallTypes.parse_data(call.data)
+    region_id = call_type.region_id
+    region = Region.regions.get(id=region_id)
+    user.region = region
+    user.bot_state = BotUser.State.INPUT_WOKRING_TIME
+    user.save()
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    keyboard.add(Keys.CANCEL)
+    bot.send_message(chat_id, Messages.INPUT_WORKING_TIME,
+                     reply_markup=keyboard)
+
+
+def region_edit_working_time_message_handler(bot: TeleBot, message):
+    chat_id = message.chat.id
+    user = BotUser.objects.get(chat_id=chat_id)
+    region = user.region
+    try:
+        t1, t2 = message.text.split()
+        h1, m1 = map(int, t1.split(':'))
+        h2, m2 = map(int, t2.split(':'))
+        working_time_from = datetime.time(h1, m1)
+        working_time_to = datetime.time(h2, m2)
+        if working_time_from > working_time_to:
+            raise
+
+        region.working_time_from = working_time_from
+        region.working_time_to = working_time_to
+        region.save()
+        user.bot_state = BotUser.State.NOTHING
+        user.save()
+        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        keyboard.add(Keys.MENU)
+        bot.send_message(chat_id, Messages.SAVED,
+                         reply_markup=keyboard)
+    except Exception:
+        traceback.print_exc()
+        bot.send_message(chat_id, Messages.INCORRECT_FORMAT)
+
+
+def region_edit_day_limit_callback_query_handler(bot: TeleBot, call):
+    chat_id = call.message.chat.id
+    user = BotUser.objects.get(chat_id=chat_id)
+    call_type = CallTypes.parse_data(call.data)
+    region_id = call_type.region_id
+    region = Region.regions.get(id=region_id)
+    user.region = region
+    user.bot_state = BotUser.State.INPUT_DAY_LIMIT
+    user.save()
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    keyboard.add(Keys.CANCEL)
+    bot.send_message(chat_id, Messages.INPUT_NUMBER,
+                     reply_markup=keyboard)
+
+
+def region_edit_day_limit_message_handler(bot: TeleBot, message):
+    chat_id = message.chat.id
+    user = BotUser.objects.get(chat_id=chat_id)
+    region = user.region
+    try:
+        day_limit = int(message.text)
+        region.day_limit = day_limit
+        region.save()
+        user.bot_state = BotUser.State.NOTHING
+        user.save()
+        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        keyboard.add(Keys.MENU)
+        bot.send_message(chat_id, Messages.SAVED,
+                         reply_markup=keyboard)
+    except Exception:
+        bot.send_message(chat_id, Messages.INCORRECT_FORMAT)
+
+
+def region_edit_period_callback_query_handler(bot: TeleBot, call):
+    chat_id = call.message.chat.id
+    user = BotUser.objects.get(chat_id=chat_id)
+    call_type = CallTypes.parse_data(call.data)
+    region_id = call_type.region_id
+    region = Region.regions.get(id=region_id)
+    user.region = region
+    user.bot_state = BotUser.State.INPUT_PERIOD
+    user.save()
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    keyboard.add(Keys.CANCEL)
+    bot.send_message(chat_id, Messages.INPUT_NUMBER,
+                     reply_markup=keyboard)
+
+
+def region_edit_period_message_handler(bot: TeleBot, message):
+    chat_id = message.chat.id
+    user = BotUser.objects.get(chat_id=chat_id)
+    region = user.region
+    try:
+        period = int(message.text)
+        region.period = period
+        region.save()
+        user.bot_state = BotUser.State.NOTHING
+        user.save()
+        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        keyboard.add(Keys.MENU)
+        bot.send_message(chat_id, Messages.SAVED,
+                         reply_markup=keyboard)
+    except Exception:
+        bot.send_message(chat_id, Messages.INCORRECT_FORMAT)
+
+
+def region_reservations_callback_query_handler(bot: TeleBot, call):
+    chat_id = call.message.chat.id
+    call_type = CallTypes.parse_data(call.data)
+    region_id = call_type.region_id
+    region = Region.regions.get(id=region_id)
+    page_number = call_type.page
+    text = utils.text_to_fat(Keys.REGION_RESERVATIONS)
+    text += '\n\n'
+    dt_range = utils.get_datetime_range_for_day(timezone.now())
+    reservations = region.reservations(manager='actual').filter(
+        datetime__range=dt_range
+    )
+    paginator = Paginator(reservations, 5)
+    page = paginator.get_page(page_number)
+    keyboard = utils.make_page_keyboard(page, CallTypes.RegionReservations)
+    for index, reservation in enumerate(page, 1):
+        reservation_info = Messages.REGION_RESERVATION_INFO.format(
+            id=reservation.id,
+            datetime=reservation.get_datetime(),
+            status=reservation.get_status_display(),
+        )
+        keyboard.add(utils.make_inline_button(str(index), CallTypes.Nothing))
+        come_key = Keys.COME
+        if reservation.status == Reservation.Status.CONFIRMED:
+            come_key = f'{Smiles.YES} ' + come_key
+
+        not_come_key = Keys.NOT_COME
+        if reservation.status == Reservation.Status.DID_NOT_COME:
+            not_come_key = f'{Smiles.NO} ' + not_come_key
+
+        keyboard.add(utils.make_inline_button(
+            text=come_key,
+            CallType=CallTypes.ReservationStatusChange,
+            reservation_id=reservation.id,
+            status=Reservation.Status.CONFIRMED
+        ), utils.make_inline_button(
+            text=not_come_key,
+            CallType=CallTypes.ReservationStatusChange,
+            reservation_id=reservation.id,
+            status=Reservation.Status.DID_NOT_COME
+        ))
+        text += reservation_info + '\n\n'
+
+    back_button = utils.make_inline_button(
+        text=Keys.BACK,
+        CallType=CallTypes.Menu,
+    )
+    keyboard.add(back_button)
+    bot.edit_message_text(
+        chat_id=chat_id,
+        text=text,
+        message_id=call.message.id,
+        reply_markup=keyboard,
+    )
+
+
+def reservation_status_change_callback_query_handler(bot: TeleBot, call):
+    call_type = CallTypes.parse_data(call.data)
+    reservation_id = call_type.reservation_id
+    reservation = Reservation.reservations.get(id=reservation_id)
+    status = call_type.status
+    reservation.status = status
+    reservation.save()
+    call_type = CallTypes.RegionReservations(region_id=reservation.region.id,
+                                             page=1)
+    call.data = CallTypes.make_data(call_type)
+    region_reservations_callback_query_handler(bot, call)
+
+
+def referal_program_callback_query_handler(bot: TeleBot, call):
+    chat_id = call.message.chat.id
+    referals_button = utils.make_inline_button(
+        text=Keys.REFERALS,
+        CallType=CallTypes.Referals,
+    )
+    back_button = utils.make_inline_button(
+        text=Keys.BACK,
+        CallType=CallTypes.Menu,
+    )
+    keyboard = types.InlineKeyboardMarkup()
+    keyboard.add(referals_button)
+    keyboard.add(back_button)
+    referal_link = f'https://t.me/{bot.get_me().username}?start={chat_id}'
+    referal_link = utils.text_to_code(referal_link)
+    bot.edit_message_text(
+        chat_id=chat_id,
+        text=Messages.REFERAL_PROGRAM.format(referal_link=referal_link),
+        message_id=call.message.id,
+        reply_markup=keyboard,
+    )
+
+
+def referals_callback_query_handler(bot: TeleBot, call):
+    chat_id = call.message.chat.id
+    user = BotUser.objects.get(chat_id=chat_id)
+    text = utils.text_to_fat(Keys.REFERALS)
+    text += '\n\n'
+    for index, referal in enumerate(user.referals.all(), 1):
+        text += f'<b>{index}.</b> <code>{referal.chat_id}</code>\n'
+
+    back_button = utils.make_inline_button(
+        text=Keys.BACK,
+        CallType=CallTypes.ReferalProgram,
+    )
+    keyboard = types.InlineKeyboardMarkup()
+    keyboard.add(back_button)
+    bot.edit_message_text(
+        chat_id=chat_id,
+        text=text,
+        message_id=call.message.id,
+        reply_markup=keyboard,
+    )

@@ -1,4 +1,6 @@
+import pytz
 from django.db import models
+from django.contrib import admin
 from ckeditor.fields import RichTextField
 from bs4 import BeautifulSoup
 from bs4.element import NavigableString, Tag
@@ -31,6 +33,9 @@ class BotUser(models.Model):
     class State(models.IntegerChoices):
         NOTHING = 0
         RESERVATION_TIME = 1
+        INPUT_WOKRING_TIME = 2
+        INPUT_DAY_LIMIT = 3
+        INPUT_PERIOD = 4
 
     region = models.ForeignKey(
         verbose_name='Регион',
@@ -50,6 +55,13 @@ class BotUser(models.Model):
     last_name = models.CharField(max_length=255,
                                  null=True,
                                  blank=True)
+    from_user = models.ForeignKey(
+        to='self',
+        on_delete=models.CASCADE,
+        related_name='referals',
+        null=True,
+        blank=True,
+    )
     bot_state = models.IntegerField(default=State.NOTHING)
     temp_date = models.DateField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -113,10 +125,18 @@ class Reservation(models.Model):
         default=Status.RESERVED,
     )
 
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
     class Meta:
         verbose_name = 'Заявка'
         verbose_name_plural = 'Заявки'
         ordering = ['datetime']
+
+    @admin.display(description='Дата и время')
+    def get_datetime(self):
+        tz = pytz.timezone(self.region.timezone)
+        return self.datetime.astimezone(tz).strftime('%d/%m/%Y %H:%M:%S')
 
 
 def filter_tag(tag: Tag, ol_number=None):

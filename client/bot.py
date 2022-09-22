@@ -21,6 +21,12 @@ key_handlers = {
 
 state_handlers = {
     BotUser.State.RESERVATION_TIME: handlers.reservation_time_message_handler,
+    BotUser.State.INPUT_WOKRING_TIME:
+        handlers.region_edit_working_time_message_handler,
+    BotUser.State.INPUT_DAY_LIMIT:
+        handlers.region_edit_day_limit_message_handler,
+    BotUser.State.INPUT_PERIOD:
+        handlers.region_edit_period_message_handler,
 }
 
 bot = TeleBot(
@@ -73,6 +79,19 @@ callback_query_handlers = {
         handlers.request_confirmation_refuse_callback_query_handler,
     CallTypes.RequestAfterVisiting:
         handlers.request_after_visting_callback_query_handler,
+    CallTypes.Admin: handlers.admin_callback_query_handler,
+    CallTypes.RegionEditWorkingTime:
+        handlers.region_edit_working_time_callback_query_handler,    
+    CallTypes.RegionEditDayLimit:
+        handlers.region_edit_day_limit_callback_query_handler,
+    CallTypes.RegionEditPeriod:
+        handlers.region_edit_period_callback_query_handler,
+    CallTypes.ReferalProgram: handlers.referal_program_callback_query_handler,
+    CallTypes.Referals: handlers.referals_callback_query_handler,
+    CallTypes.RegionReservations:
+        handlers.region_reservations_callback_query_handler,
+    CallTypes.ReservationStatusChange:
+        handlers.reservation_status_change_callback_query_handler,
 }
 
 

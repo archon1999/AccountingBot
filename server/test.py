@@ -11,11 +11,9 @@ from backend.models import Reservation
 
 import pytz
 
-tz = pytz.timezone('Etc/GMT-3')
+import psutil
 
-dt = datetime.datetime.now()
-dt = dt.replace(tzinfo=tz)
-print(dt)
-
-for tz in pytz.all_timezones:
-    print(tz)
+for proc in psutil.process_iter():
+    if 'Accounting' in proc.cwd():
+        if 'bot.py' in proc.cmdline():
+            proc.kill()
